@@ -1,7 +1,29 @@
-import React from 'react';
+import React from "react";
+import ReactFC from "react-fusioncharts";
+import FusionCharts from "fusioncharts";
+import Column2D from "fusioncharts/fusioncharts.charts";
+import FusionTheme from "fusioncharts/themes/fusioncharts.theme.candy";
 
-const Doughnut2d = () => {
-  return <div>chart</div>;
+ReactFC.fcRoot(FusionCharts, Column2D, FusionTheme);
+
+const ChartComponent = ({ data }) => {
+  const chartConfigs = {
+    type: "doughnut2d",
+    width: "100%",
+    height: "400",
+    dataFormat: "json",
+    dataSource: {
+      chart: {
+        caption: "Stars Per Language",
+        theme: "candy",
+        decimals: 0,
+        doghnutRadius: "65%",
+        showPercentValue: 0,
+      },
+      data,
+    },
+  };
+  return <ReactFC {...chartConfigs} />;
 };
 
-export default Doughnut2d;
+export default ChartComponent;
