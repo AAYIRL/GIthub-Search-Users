@@ -35,6 +35,16 @@ export const GithubProvider = ({ children }) => {
 
     if (res) {
       setGithubUser(res.data);
+      const { login, followers_url } = res.data;
+      // repos
+      axios(`${rootUrl}/users/${login}/repos?per_page=100`)
+        .then((res) => setRepos(res.data))
+        .catch((error) => console.log(error));
+
+      // followers
+      axios(`${followers_url}?per_page=100`)
+        .then((res) => setFollowers(res.data))
+        .catch((error) => console.log(error));
     } else {
       toggleError(true, "Not a valid Username");
     }
