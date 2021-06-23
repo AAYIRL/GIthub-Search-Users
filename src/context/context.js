@@ -25,6 +25,20 @@ export const GithubProvider = ({ children }) => {
     setError({ show, msg });
   };
 
+  const searchGithubUser = async (user) => {
+    toggleError();
+
+    const res = await axios(`${rootUrl}/users/${user}`).catch((error) =>
+      console.log(error)
+    );
+
+    if (res) {
+      setGithubUser(res.data);
+    } else {
+      toggleError(true, "Not a valid Username");
+    }
+  };
+
   // Check Remaining Requests
   const checkRequests = () => {
     axios(`${rootUrl}/rate_limit`)
@@ -50,6 +64,7 @@ export const GithubProvider = ({ children }) => {
         followers,
         requests,
         error,
+        searchGithubUser,
       }}>
       {children}
     </GithubContext.Provider>
