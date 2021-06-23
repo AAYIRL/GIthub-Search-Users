@@ -36,14 +36,23 @@ export const GithubProvider = ({ children }) => {
     if (res) {
       setGithubUser(res.data);
       const { login, followers_url } = res.data;
-      // repos
-      axios(`${rootUrl}/users/${login}/repos?per_page=100`)
-        .then((res) => setRepos(res.data))
-        .catch((error) => console.log(error));
 
-      // followers
-      axios(`${followers_url}?per_page=100`)
-        .then((res) => setFollowers(res.data))
+      await Promise.allSettled([
+        axios(`${rootUrl}/users/${login}/repos?per_page=100`),
+        axios(`${followers_url}?per_page=100`),
+      ])
+        .then((result) => {
+          const [repos, followers] = result;
+          const status = "fulfilled";
+
+          if (repos.status === status) {
+            setRepos(repos.value.data);
+          }
+
+          if (followers.status === status) {
+            setFollowers(followers.value.data);
+          }
+        })
         .catch((error) => console.log(error));
     } else {
       toggleError(true, "Not a valid Username");
