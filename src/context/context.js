@@ -27,6 +27,7 @@ export const GithubProvider = ({ children }) => {
 
   const searchGithubUser = async (user) => {
     toggleError();
+    setIsLoading(true);
 
     const res = await axios(`${rootUrl}/users/${user}`).catch((error) =>
       console.log(error)
@@ -37,6 +38,9 @@ export const GithubProvider = ({ children }) => {
     } else {
       toggleError(true, "Not a valid Username");
     }
+
+    checkRequests();
+    setIsLoading(false);
   };
 
   // Check Remaining Requests
@@ -64,6 +68,7 @@ export const GithubProvider = ({ children }) => {
         followers,
         requests,
         error,
+        isLoading,
         searchGithubUser,
       }}>
       {children}
